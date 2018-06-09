@@ -2,4 +2,5 @@
     <string name="app_name">music app</string>
     <string name="textview">TextView</string>
     <string name="sample">Sample_music</string>
+    <string name="play_sample">Play sample</string>
 </resources>
