@@ -3,7 +3,6 @@ package com.example.user.musicapp;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.RemoteController;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -60,6 +59,12 @@ private AudioManager mAudioManager;
 
         mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+               releaseMediaPlayer();// finish current activity
+            }
+        });
+
     }
 //AudioManager.OnAudioFocusChangeListener();
 
@@ -74,10 +79,6 @@ private AudioManager mAudioManager;
             mp.start();
 
         }
-
-
-
-
 
     }
     //Clean up the media player by releasing its resources.
