@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SampleMusic"
+            android:screenOrientation="portrait"
             android:label="@string/sample"
             ></activity>
     </application>

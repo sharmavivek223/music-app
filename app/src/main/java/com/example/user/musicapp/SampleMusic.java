@@ -42,6 +42,7 @@ private AudioManager mAudioManager;
                         // sure to return it to normal here, as well.
                         mp.start();
                     }
+
                 }
             };
 
@@ -59,11 +60,7 @@ private AudioManager mAudioManager;
 
         mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-               releaseMediaPlayer();// finish current activity
-            }
-        });
+
 
     }
 //AudioManager.OnAudioFocusChangeListener();
@@ -75,8 +72,14 @@ private AudioManager mAudioManager;
         if(result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
         {
           //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
-            mp=MediaPlayer.create(this,R.raw.sample);
+            mp=MediaPlayer.create(this,R.raw.sample2);
             mp.start();
+
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp1) {
+                    releaseMediaPlayer();// finish current activity
+                }
+            });
 
         }
 
