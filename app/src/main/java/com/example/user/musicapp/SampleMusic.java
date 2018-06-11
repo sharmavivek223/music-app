@@ -1,15 +1,19 @@
-package com.example.user.musicapp;
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
+        package com.example.user.musicapp;
 
-public class SampleMusic extends AppCompatActivity {
-private MediaPlayer mp;
-private AudioManager mAudioManager;
+        import android.content.Context;
+        import android.media.AudioManager;
+        import android.media.MediaPlayer;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.Button;
+
+        public class SampleMusic extends AppCompatActivity {
+    private MediaPlayer mp;
+    private AudioManager mAudioManager;
+    private Button b2;
+    private Button b3;
 
     AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
@@ -19,13 +23,14 @@ private AudioManager mAudioManager;
                         // temporarily stolen, but will be back soon.
                         // i.e. for a phone call
                         mp.pause();
+
                     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                         // Stop playback, because you lost the Audio Focus.
                         // i.e. the user started some other playback app
                         // Remember to unregister your controls/buttons here.
                         // And release the kra — Audio Focus!
                         // You’re done.
-                         releaseMediaPlayer();
+                        releaseMediaPlayer();
                     } else if (focusChange ==
                             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                         // Lower the volume, because something else is also
@@ -33,7 +38,10 @@ private AudioManager mAudioManager;
                         // i.e. for notifications or navigation directions
                         // Depending on your audio playback, you may prefer to
                         // pause playback here instead. You do you.
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN ||
+                            focusChange==AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
+                            focusChange==AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE) {
                         // Resume playback, because you hold the Audio Focus
                         // again!
                         // i.e. the phone call ended or the nav directions
@@ -46,13 +54,13 @@ private AudioManager mAudioManager;
                 }
             };
 
-
+/*
     @Override
     protected void onStop() {
         super.onStop();
         releaseMediaPlayer();
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +68,43 @@ private AudioManager mAudioManager;
 
         mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
+        Button b1=(Button)findViewById(R.id.button1);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                releaseMediaPlayer();
+                int result=mAudioManager.requestAudioFocus(afChangeListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
+                if(result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+                {
+                    //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
+                    mp=MediaPlayer.create(SampleMusic.this,R.raw.sample2);
+                    mp.start();
+                    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        public void onCompletion(MediaPlayer mp1) {
+                            releaseMediaPlayer();// finish current activity
+                        }
+                    });
 
-
+                }
+            }
+        });
+b2=(Button)findViewById(R.id.button2);
+b2.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        mp.pause();
     }
+});
+        b3=(Button)findViewById(R.id.button3);
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mp.stop();
+                releaseMediaPlayer();
+            }
+        });
+
+    } //end of onCreate method
 //AudioManager.OnAudioFocusChangeListener();
 
     public void playSample(View view)
@@ -71,15 +113,11 @@ private AudioManager mAudioManager;
         int result=mAudioManager.requestAudioFocus(afChangeListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
         if(result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
         {
-          //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
+            //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
             mp=MediaPlayer.create(this,R.raw.sample2);
             mp.start();
 
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp1) {
-                    releaseMediaPlayer();// finish current activity
-                }
-            });
+
 
         }
 
