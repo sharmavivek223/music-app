@@ -1,21 +1,22 @@
+ package com.example.user.musicapp;
 
-        package com.example.user.musicapp;
+ import android.content.Context;
+ import android.media.AudioManager;
+ import android.media.MediaPlayer;
+ import android.support.v7.app.AppCompatActivity;
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.Button;
 
-        import android.content.Context;
-        import android.media.AudioManager;
-        import android.media.MediaPlayer;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.view.View;
-        import android.widget.Button;
+ public class SampleMusic extends AppCompatActivity {
+ private MediaPlayer mp;
+ private AudioManager mAudioManager;
+ private Button b2;
+ private Button b3;
+ private Button b4;
 
-        public class SampleMusic extends AppCompatActivity {
-    private MediaPlayer mp;
-    private AudioManager mAudioManager;
-    private Button b2;
-    private Button b3;
 
-    AudioManager.OnAudioFocusChangeListener afChangeListener =
+ AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
@@ -68,8 +69,8 @@
 
         mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
-        Button b1=(Button)findViewById(R.id.button1);
-        b1.setOnClickListener(new View.OnClickListener() {
+Button b1=(Button)findViewById(R.id.button1);
+b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 releaseMediaPlayer();
@@ -88,6 +89,7 @@
                 }
             }
         });
+
 b2=(Button)findViewById(R.id.button2);
 b2.setOnClickListener(new View.OnClickListener() {
     @Override
@@ -95,8 +97,9 @@ b2.setOnClickListener(new View.OnClickListener() {
         mp.pause();
     }
 });
-        b3=(Button)findViewById(R.id.button3);
-        b3.setOnClickListener(new View.OnClickListener() {
+
+b3=(Button)findViewById(R.id.button3);
+b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mp.stop();
@@ -104,8 +107,19 @@ b2.setOnClickListener(new View.OnClickListener() {
             }
         });
 
+
+b4=(Button)findViewById(R.id.button4);
+b4.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        mp.start();
+    }
+});
+
+
+
     } //end of onCreate method
-//AudioManager.OnAudioFocusChangeListener();
+
 
     public void playSample(View view)
     {  releaseMediaPlayer();

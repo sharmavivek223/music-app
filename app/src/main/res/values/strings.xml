@@ -5,4 +5,5 @@
     <string name="play_sample">Play sample</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
+    <string name="resume">RESUME</string>
 </resources>
