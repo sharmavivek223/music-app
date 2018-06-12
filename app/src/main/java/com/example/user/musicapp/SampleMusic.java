@@ -7,6 +7,7 @@
  import android.os.Bundle;
  import android.view.View;
  import android.widget.Button;
+ import android.widget.Toast;
 
  public class SampleMusic extends AppCompatActivity {
  private MediaPlayer mp;
@@ -15,6 +16,7 @@
  private Button b3;
  private Button b4;
 
+ int trial=0;
 
  AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
@@ -39,6 +41,12 @@
                         // i.e. for notifications or navigation directions
                         // Depending on your audio playback, you may prefer to
                         // pause playback here instead. You do you.
+                        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+                        mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
+                        mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
+                        mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
+                        mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
+                        trial=1;
 
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN ||
                             focusChange==AudioManager.AUDIOFOCUS_GAIN_TRANSIENT ||
@@ -50,24 +58,34 @@
                         // If you implement ducking and lower the volume, be
                         // sure to return it to normal here, as well.
                         mp.start();
+                        if(trial==1)
+                        {
+                            mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
+                            mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
+                            mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
+                            mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
+                            trial=0;
+                        }
                     }
 
                 }
             };
 
-/*
-    @Override
-    protected void onStop() {
-        super.onStop();
-        releaseMediaPlayer();
-    }
-*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_music);
 
-        mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
+     mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+
+  try{
+      setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+   }catch(Exception e)
+        { Toast.makeText(SampleMusic.this,"not allowed",Toast.LENGTH_SHORT); }
+
 
 Button b1=(Button)findViewById(R.id.button1);
 b1.setOnClickListener(new View.OnClickListener() {
@@ -108,13 +126,18 @@ b3.setOnClickListener(new View.OnClickListener() {
         });
 
 
+
+
 b4=(Button)findViewById(R.id.button4);
 b4.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
+        if(mp.isPlaying())
         mp.start();
+        else Toast.makeText(SampleMusic.this,"not allowed",Toast.LENGTH_SHORT);
     }
 });
+
 
 
 
@@ -130,11 +153,7 @@ b4.setOnClickListener(new View.OnClickListener() {
             //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
             mp=MediaPlayer.create(this,R.raw.sample2);
             mp.start();
-
-
-
         }
-
     }
     //Clean up the media player by releasing its resources.
 
