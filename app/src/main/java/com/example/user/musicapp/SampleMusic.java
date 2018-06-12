@@ -16,7 +16,8 @@
  private Button b3;
  private Button b4;
 
- int trial=0;
+ int trial=0,pauseplay=0;
+ //pauseplay variable checks if song has been played or if mediaplayer is empty
 
  AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
@@ -79,13 +80,13 @@
 
      mAudioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
-
+/*
   try{
       setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
    }catch(Exception e)
         { Toast.makeText(SampleMusic.this,"not allowed",Toast.LENGTH_SHORT); }
-
+*/
 
 Button b1=(Button)findViewById(R.id.button1);
 b1.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +99,7 @@ b1.setOnClickListener(new View.OnClickListener() {
                     //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
                     mp=MediaPlayer.create(SampleMusic.this,R.raw.sample2);
                     mp.start();
+                    pauseplay=1;
                     mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         public void onCompletion(MediaPlayer mp1) {
                             releaseMediaPlayer();// finish current activity
@@ -132,9 +134,8 @@ b4=(Button)findViewById(R.id.button4);
 b4.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-        if(mp.isPlaying())
+        if(mp!=null)
         mp.start();
-        else Toast.makeText(SampleMusic.this,"not allowed",Toast.LENGTH_SHORT);
     }
 });
 
@@ -153,6 +154,7 @@ b4.setOnClickListener(new View.OnClickListener() {
             //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
             mp=MediaPlayer.create(this,R.raw.sample2);
             mp.start();
+            pauseplay=1;
         }
     }
     //Clean up the media player by releasing its resources.
@@ -169,6 +171,7 @@ b4.setOnClickListener(new View.OnClickListener() {
             // is not configured to play an audio file at the moment.
             mp= null;
             mAudioManager.abandonAudioFocus(afChangeListener);
+            pauseplay=0;
         }
     }
 
