@@ -10,14 +10,14 @@
  import android.widget.Toast;
 
  public class SampleMusic extends AppCompatActivity {
- private MediaPlayer mp;
+ public MediaPlayer mp;
  private AudioManager mAudioManager;
  private Button b2;
  private Button b3;
  private Button b4;
 
- int trial=0,pauseplay=0;
- //pauseplay variable checks if song has been played or if mediaplayer is empty
+ int trial=0;
+ //trial variable checks for rasing sound after notification
 
  AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
@@ -46,7 +46,7 @@
                         mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
                         mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
                         mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
-                        mAudioManager.adjustVolume(AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
+
                         trial=1;
 
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN ||
@@ -64,7 +64,7 @@
                             mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
                             mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
                             mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
-                            mAudioManager.adjustVolume(AudioManager.ADJUST_RAISE,AudioManager.FLAG_PLAY_SOUND);
+
                             trial=0;
                         }
                     }
@@ -89,6 +89,7 @@
 */
 
 Button b1=(Button)findViewById(R.id.button1);
+//play butoon
 b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +100,7 @@ b1.setOnClickListener(new View.OnClickListener() {
                     //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
                     mp=MediaPlayer.create(SampleMusic.this,R.raw.sample2);
                     mp.start();
-                    pauseplay=1;
+
                     mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         public void onCompletion(MediaPlayer mp1) {
                             releaseMediaPlayer();// finish current activity
@@ -111,19 +112,26 @@ b1.setOnClickListener(new View.OnClickListener() {
         });
 
 b2=(Button)findViewById(R.id.button2);
+//pause button
 b2.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-        mp.pause();
+       if(mp!=null)
+           mp.pause();
     }
 });
 
 b3=(Button)findViewById(R.id.button3);
+//stop button
 b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mp.stop();
-                releaseMediaPlayer();
+                if(mp!=null)
+                {
+                    mp.stop();
+                    releaseMediaPlayer();
+                }
+
             }
         });
 
@@ -131,6 +139,7 @@ b3.setOnClickListener(new View.OnClickListener() {
 
 
 b4=(Button)findViewById(R.id.button4);
+//resume button
 b4.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
@@ -154,7 +163,7 @@ b4.setOnClickListener(new View.OnClickListener() {
             //  mAudioManager.registerMediaButtonEventReceiver(RemoteController);
             mp=MediaPlayer.create(this,R.raw.sample2);
             mp.start();
-            pauseplay=1;
+
         }
     }
     //Clean up the media player by releasing its resources.
@@ -171,7 +180,7 @@ b4.setOnClickListener(new View.OnClickListener() {
             // is not configured to play an audio file at the moment.
             mp= null;
             mAudioManager.abandonAudioFocus(afChangeListener);
-            pauseplay=0;
+
         }
     }
 
