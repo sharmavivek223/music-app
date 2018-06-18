@@ -15,6 +15,7 @@
  private Button b2;
  private Button b3;
  private Button b4;
+ int a;
 
  int trial=0;
  //trial variable checks for rasing sound after notification
